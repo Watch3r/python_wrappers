@@ -53,8 +53,9 @@ class file_io():
             else:
                 file.write(text_to_write)
 
-    def write_csv_from_dict(self, fieldnames:list, dict_to_write:list):
+    def write_csv_from_dict(self, fieldnames: list, dict_to_write: list):
         """
+
         :param fieldnames: List of fieldnames
         :param dict_to_write: List of nested dicts
         :return:
@@ -66,6 +67,10 @@ class file_io():
                 writer.writerow(i)
 
     def read_csv(self):
+        """
+        Read CSV file to nested list.
+        :return: list: nested list of CSV file.
+        """
         rows = []
         with open(self.file_name, newline='\n', encoding='utf-8', errors='ignore') as f:
             for row in csv.reader(f):
@@ -99,7 +104,13 @@ class file_io():
         return tmp
 
 class file_work():
-    def check_file_exists(self, file_name, add_cwd=False):
+    def check_file_exists(self, file_name: str, add_cwd=False):
+        """
+        Check if file exists on local file system.
+        :param file_name: str of filename
+        :param add_cwd: boolean
+        :return:
+        """
         if add_cwd:
             return os.path.isfile(os.path.join(os.getcwd(), file_name))
         return os.path.isfile(file_name)
