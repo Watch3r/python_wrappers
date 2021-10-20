@@ -95,7 +95,7 @@ class file_io():
     def read_file_hex_dump(self):
         """
         Returns a hex dump of file contents.
-        :return: bytes: Hex dump
+        :return: bytes: Hex dump of file contents.
         """
         tmp = []
         with open(self.file_name, 'rb') as file:
