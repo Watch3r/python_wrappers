@@ -75,14 +75,22 @@ class file_io():
         with open(self.file_name, newline='\n', encoding='utf-8', errors='ignore') as f:
             for row in csv.reader(f):
                 rows.append(row)
-
         return rows
 
     def write_csv(self, list_to_write):
-        with open(self.file_name, mode='w+', newline="\n") as file:
-            writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
-            for row in list_to_write:
-                writer.writerow(row)
+        """
+        Write a nested list of lists to a csv file.
+        :param list_to_write: list: nested list to write.
+        :return: boolean: True if successfully finished, False if not.
+        """
+        try:
+            with open(self.file_name, mode='w+', newline="\n") as file:
+                writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
+                for row in list_to_write:
+                    writer.writerow(row)
+            return True
+        except:
+            return False
 
     def read_json(self):
         with open(self.file_name, 'r', newline='\n', encoding='utf-8', errors='ignore') as json_file:
@@ -109,24 +117,48 @@ class file_work():
         Check if file exists on local file system.
         :param file_name: str of filename
         :param add_cwd: boolean
-        :return:
+        :return: string: Path of file.
         """
         if add_cwd:
             return os.path.isfile(os.path.join(os.getcwd(), file_name))
+
         return os.path.isfile(file_name)
 
-    def delete_files(self, starts_with="", ends_with="", file_is=""):
-        for i in [f for f in os.listdir(os.getcwd()) if os.path.isfile(os.path.join(os.getcwd(), f))]:
+    def delete_files(self, path="", starts_with="", ends_with="", file_is=""):
+        """
+        Delete all files in directory that meet your naming requirements.
+        :param path: string: Path you wish to work from, if empty it will be cwd of the script.
+        :param starts_with: string: If the filename starts with this combination it will be deleted.
+        :param ends_with: string: If the filename ends with this combination it will be deleted.
+        :param file_is: string: If the filename matches with file_is it will be deleted.
+        :return: list: List of deleted files.
+        """
+        deleted_files = []
+        if not path:
+            path = os.getcwd()
+
+        for i in [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]:
             if starts_with or ends_with:
                 if i.startswith(starts_with) and i.endswith(ends_with):
+                    deleted_files.append(i)
                     os.remove(i)
             if file_is:
                 if i == file_is:
+                    deleted_files.append(i)
                     os.remove(i)
 
+        return list(set(deleted_files))
+
     def bulk_file_select(self, path="", starts_with="", ends_with="", file_is=""):
+        """
+        List all files in directory that meet your naming requirements.
+        :param path: string: Path you wish to work from, if empty it will be cwd of the script.
+        :param starts_with: string: If the filename starts with this combination it will be returned.
+        :param ends_with: string: If the filename ends with this combination it will be returned.
+        :param file_is: string: If the filename matches with file_is it will be returned.
+        :return: list: List of found files that meet naming requirements.
+        """
         return_list = []
-        
         if not path:
             path = os.getcwd()
 
@@ -139,38 +171,63 @@ class file_work():
                     return_list.append(i)
         return return_list
 
-    def select_file(self, message="", full_path=False, files=[]):
+    def list_selection(self, message: str, opts: list):
+        """
+        Provide a message and list of options with corresponding numbers so a user can select an item.
+        :param message: string: Message to provide context around options.
+        :param opts: list: List of items to list as options.
+        :return: string: Selected value from list based on selection.
+        """
         while True:
-            if message:
-                print(message)
-            print("Select a file:")
-            if not files:
-                files = [f for f in os.listdir(os.getcwd()) if os.path.isfile(os.path.join(os.getcwd(), f))]
-            for num, file in enumerate(files, start=1):
-                print("{}: {}".format(num, file))
-            choice = input("Enter corresponding number to file: ")
+            print(message)
+            print("Make your selection:")
+            for num, opt in enumerate(opts, start=1):
+                print("{}: {}".format(str(num), str(opt)))
+            choice = input("Enter corresponding number to option: ")
             try:
                 choice = int(choice)
             except:
                 print("Enter a number.")
                 continue
-            if choice < 1 or choice > len(files):
-                print("Make a choice from 1 - {}".format(str(len(files))))
+            if choice < 1 or choice > len(opts):
+                print("Make a choice from 1 - {}".format(str(len(opts))))
                 continue
-            if full_path:
-                return "{}\\{}".format(os.getcwd(), files[choice - 1])
-            return files[choice - 1]
+            return opts[choice - 1]
 
 class file_process():
     def __init__(self, file_name):
+        """
+        Initialize class with a filename you will be working on. Full file path is optional.
+        :param file_name: string: name of file
+        """
         self.file_name = file_name
 
-    def unzip(self, extract_dir):
-        with zipfile.ZipFile(self.file_name, 'r') as zip_ref:
-            zip_ref.extractall(extract_dir)
+    def unzip(self, extract_dir=""):
+        """
+        Unzip a zip file to a directory or cwd.
+        :param extract_dir: string: Directory to unzip files to.
+        :return: boolean: True if unzipped successfully, False if not.
+        """
+        if not extract_dir:
+            extract_dir = os.getcwd()
+
+        try:
+            with zipfile.ZipFile(self.file_name, 'r') as zip_ref:
+                zip_ref.extractall(extract_dir)
+            return True
+        except:
+            return False
 
 class logger():
     def log(self, message, file_name, sev=5, debug=False):
+        """
+        Log a message to a file using Python logging.
+        :param message: string: Message to log to a file.
+        :param file_name: string: Filename where to log message.
+        :param sev: int: Severity (1-5) of message to log. 1:Critical, 2:Error, 3:Warning, 4:Info, 5:Debug (5:catch all)
+        :param debug: boolean: To enable debug logging, this captures more but is very noisy and not always wanted.
+        :return: boolean: True if successfully logged, False if not.
+        """
         try:
             log_level = logging.INFO if not debug else logging.DEBUG
             logging.basicConfig(filename=file_name, level=log_level, format="%(asctime)s:%(levelname)s:%(message)s", datefmt='%Y-%m-%d %H:%M:%S')
