@@ -1,8 +1,7 @@
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 import time
-#from proxy_checker import ProxyChecker
-#from selenium.webdriver.common.proxy import Proxy, ProxyType
+
 
 class _selenium():
     def chrome_driver(self, user_agent="", headless=True, dl_path=""):

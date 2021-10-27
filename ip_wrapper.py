@@ -2,7 +2,7 @@ import requests
 import json
 import re
 import ipaddress
-#import ast
+
 
 class _ip():
     def ipv4_extract(self, text: str):

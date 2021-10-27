@@ -1,5 +1,6 @@
 import requests
 
+
 class telegram():
     def send_message(self, message: str, token: str, chat_id: str):
         """
