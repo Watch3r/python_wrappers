@@ -1,6 +1,8 @@
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 import time
+
+from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 class _selenium():
@@ -55,17 +57,14 @@ class _selenium():
 
         options = webdriver.ChromeOptions()
         options.add_argument("user-agent={}".format(user_agent))
-
-        if headless:
-            options.add_argument("--headless")
+        options.add_argument('--no-sandbox')
+        options.add_argument("--headless")
 
         if dl_path:
             p = {'download.default_directory': dl_path}
             options.add_experimental_option("prefs", p)
 
-        #driver = webdriver.Remote(command_executor='http://{}/wd/hub'.format(hub_ip_port), desired_capabilities={'browserName': browser, 'javascriptEnabled': True}, options=options)
-
-        return webdriver.Remote(command_executor='http://{}/wd/hub'.format(hub_ip_port), desired_capabilities={'browserName': browser, 'javascriptEnabled': True}, options=options)
+        return webdriver.Remote('http://{}/wd/hub'.format(hub_ip_port), DesiredCapabilities.CHROME, options=options)
 
     def beta_chrome_driver(self, user_agent="", headless=True, dl_path="", proxy={}):
         """
