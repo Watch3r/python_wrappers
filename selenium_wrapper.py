@@ -58,7 +58,9 @@ class _selenium():
         options = webdriver.ChromeOptions()
         options.add_argument("user-agent={}".format(user_agent))
         options.add_argument('--no-sandbox')
-        options.add_argument("--headless")
+
+        if headless:
+            options.add_argument("--headless")
 
         if dl_path:
             p = {'download.default_directory': dl_path}
