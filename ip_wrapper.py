@@ -1,7 +1,8 @@
-import requests
-import json
-import re
 import ipaddress
+import json
+import random
+import re
+import requests
 
 
 class _ip():
@@ -59,6 +60,26 @@ class _ip():
             _d[k] = content[k] if k in content.keys() else 'None'
 
         return _d
+
+    def get_external_ip(self):
+        """
+        Return the external IP address from where script is being run. Multiple sources just to not bother any service too much.
+        :return: string: IP address
+        """
+        sources = ["https://ident.me", "https://api.ipify.org", "https://myip.dnsomatic.com", "https://ipecho.net/plain",
+                "http://checkip.dyndns.org/", "http://ipinfo.io/ip", "http://icanhazip.com"]
+
+        random.shuffle(sources)
+
+        for s in sources:
+            content = requests.get(s)
+            if content.status_code != 200:
+                continue
+            t = self.ipv4_extract(content.text.strip())[0]
+            if self.check_ip_local(t) is False:
+                return t
+
+        return "Could not get external IP address."
 
 def main():
     pass
