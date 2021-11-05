@@ -3,6 +3,7 @@ import json
 import random
 import re
 import requests
+import socket
 
 
 class _ip():
@@ -90,6 +91,18 @@ class _ip():
                 return t
 
         return "Could not get external IP address."
+
+    def get_internal_ip(self, connect_ip: str = "8.8.8.8"):
+        """
+        Get the internal IP address for the adapter that connects to the "connect_ip" parameter.
+        :param connect_ip: string: IP address to connect to.
+        :return: string: IP address
+        """
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect((connect_ip, 80))
+        ip_address = str(s.getsockname()[0])
+        s.close()
+        return ip_address
 
 def main():
     pass
