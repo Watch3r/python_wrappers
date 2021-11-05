@@ -41,6 +41,16 @@ class _ip():
             ans = None
         return ans
 
+    def check_valid_ipv4(self, ip: str):
+        """
+        Check if IP address is valid, private or local, IPv4 address.
+        :param ip: string: IP address to check.
+        :return: boolean: True if valid IPv4, False if not.
+        """
+        if self.check_ip_local(ip):
+            return True
+        return False
+
     def ipinfo_io(self, ip: str):
         """
         Get information on IP address from https://ipinfo.io.
