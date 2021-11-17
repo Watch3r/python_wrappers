@@ -131,4 +131,5 @@ dmypy.json
 #Personal
 *.json
 *.pickle
-test_remote.py
+*.csv
+test*

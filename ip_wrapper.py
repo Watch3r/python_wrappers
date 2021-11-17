@@ -104,8 +104,10 @@ class _ip():
         s.close()
         return ip_address
 
+
 def main():
     pass
+
 
 if __name__ == '__main__':
     main()

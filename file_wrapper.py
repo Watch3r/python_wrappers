@@ -5,6 +5,7 @@ import zipfile
 import codecs
 import logging
 
+
 class file_io():
     def __init__(self, file_name):
         """
@@ -71,11 +72,8 @@ class file_io():
         Read CSV file to nested list.
         :return: list: nested list of CSV file.
         """
-        rows = []
         with open(self.file_name, newline='\n', encoding='utf-8', errors='ignore') as f:
-            for row in csv.reader(f):
-                rows.append(row)
-        return rows
+            return [row for row in csv.reader(f)]
 
     def write_csv(self, list_to_write):
         """
@@ -110,6 +108,7 @@ class file_io():
             for chunk in iter(lambda: file.read(32), b''):
                 tmp.append(codecs.encode(chunk, 'hex'))
         return tmp
+
 
 class file_work():
     def check_file_exists(self, file_name: str, add_cwd=False):
@@ -194,6 +193,7 @@ class file_work():
                 continue
             return opts[choice - 1]
 
+
 class file_process():
     def __init__(self, file_name):
         """
@@ -218,6 +218,7 @@ class file_process():
         except:
             return False
 
+
 class logger():
     def log(self, message, file_name, sev=5, debug=False):
         """
@@ -235,6 +236,7 @@ class logger():
             return True
         except:
             return False
+
 
 if __name__ == '__main__':
     pass
