@@ -11,6 +11,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from traceback import print_exc
 
+
 class google_drive():
     def __init__(self):
         """
@@ -219,12 +220,10 @@ class google_drive():
         else:
             return {'id': str(self.create_folder(folder_name=folder_name, parent_id=parent_id)), 'name': folder_name, 'parents': [parent_id]}
 
+
 def main():
     google_drive().authenticate()
 
-    # Usage
-    # _d = google_drive()
-    # _d.method
 
 if __name__ == '__main__':
     main()

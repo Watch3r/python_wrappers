@@ -105,9 +105,5 @@ class _ip():
         return ip_address
 
 
-def main():
-    pass
-
-
 if __name__ == '__main__':
-    main()
+    pass

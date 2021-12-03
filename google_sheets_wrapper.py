@@ -3,6 +3,7 @@ import os
 import time
 import pathlib
 
+
 class google_sheet():
     def __init__(self, service_account_file="", sheet_name="", sheet_id=""):
         """
@@ -203,8 +204,6 @@ class google_sheet():
         """
         return self.gc.open(self.sheet_name).worksheet(worksheet_name).clear()
 
-def main():
-    pass
 
 if __name__ == '__main__':
-    main()
+    pass

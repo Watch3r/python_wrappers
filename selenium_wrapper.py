@@ -163,8 +163,10 @@ class acts():
         driver.set_window_size(total_width, total_height)
         return driver
 
+
 def main():
     pass
+
 
 if __name__ == '__main__':
     main()
